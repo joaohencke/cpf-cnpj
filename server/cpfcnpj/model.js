@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const Schema = new mongoose.Schema(
   {
     value: { type: String, required: true, unique: true },
-    type: { type: String, enum: ['cpf', 'cnpj'], required: true },
     blacklist: { type: Boolean, default: false },
   },
   { timestamps: true },

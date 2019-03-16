@@ -6,11 +6,16 @@
     "start": "next start"
   },
   "dependencies": {
+    "@zeit/next-css": "^1.0.1",
+    "axios": "^0.18.0",
     "boom": "^7.3.0",
+    "bootstrap": "^4.3.1",
     "express": "^4.16.4",
     "mongoose": "^5.4.19",
+    "morgan": "^1.9.1",
     "next": "8.0.3",
     "react": "16.8.4",
-    "react-dom": "16.8.4"
+    "react-dom": "16.8.4",
+    "superstruct": "^0.6.0"
   }
 }
