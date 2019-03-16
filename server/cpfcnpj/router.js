@@ -28,7 +28,7 @@ router.post('/',
       .catch(next);
   });
 
-router.put('/:id',
+router.put('/:_id',
   validator('body', {
     _id: 'string & mongoId',
     value: 'string & cpfcnpj',

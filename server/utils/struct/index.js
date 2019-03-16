@@ -52,7 +52,7 @@ const validations = {
     if (result != digits.charAt(1)) return 'invalid_cnpj';
     return true;
   },
-}
+};
 
 exports.struct = superstruct({
   types: {
