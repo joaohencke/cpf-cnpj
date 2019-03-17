@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { Link } from '../../routes';
 
 const Item = ({ route, text, params }) => {
-  console.log(text);
   if (!route) {
     return <span className="breadcrumb-item">{text}</span>;
   }

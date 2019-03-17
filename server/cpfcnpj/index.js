@@ -20,7 +20,7 @@ exports.update = ({ _id, value, blacklist }) => {
 
 exports.get = ({ _id }) => Model.findById(_id).lean();
 
-exports.list = async ({ order, filter, page = 0, limit = 30 }) => {
+exports.list = async ({ order, filter, page = 0, limit = 10 }) => {
   const query = {};
 
   if (filter) {
@@ -31,7 +31,7 @@ exports.list = async ({ order, filter, page = 0, limit = 30 }) => {
   let mongoSearch = Model.find(query);
 
   if (order) mongoSearch = mongoSearch.sort(order);
-  if (page) mongoSearch = mongoSearch.skip(page * limit).limit(limit);
+  if (page) mongoSearch = mongoSearch.skip(parseInt(page, 10) * limit).limit(limit);
 
   const [items, total] = await Promise.all([mongoSearch.exec(), Model.countDocuments(query)]);
   return { items, total };

@@ -5,8 +5,9 @@ import Card from './Card';
 import CardBody from './CardBody';
 import CardHeader from './CardHeader';
 import MaskedInput from './MaskedInput';
+import Pager from './Pager';
 
 Card.Header = CardHeader;
 Card.Body = CardBody;
 
-export { Form, Content, Breadcrumb, Card, CardBody, CardHeader, MaskedInput };
+export { Form, Content, Breadcrumb, Card, CardBody, CardHeader, MaskedInput, Pager };

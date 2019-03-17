@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import moment from 'moment';
 
 import { Link } from '../../../routes';
-import { Content, Breadcrumb, Form, Card } from '../../components';
+import { Content, Breadcrumb, Form, Card, Pager } from '../../components';
 import { fetch, mask } from '../service';
 
 class ListView extends Component {
@@ -24,6 +24,7 @@ class ListView extends Component {
 
     this.fetch = this.fetch.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.pager = this.pager.bind(this);
   }
 
   componentWillMount() {
@@ -45,6 +46,20 @@ class ListView extends Component {
     this.setState({ items, total, fetching: false });
   }
 
+  pager(increment) {
+    console.log(increment);
+    // const { page } = this.state;
+    // console.log(page, current);
+    // this.setState({ page: page + current });
+    // setTimeout(this.fetch, 10);
+    this.setState(
+      state => {
+        return { page: state.page + increment };
+      },
+      () => this.fetch(),
+    );
+  }
+
   handleChange(e) {
     this.setState({
       [e.target.name]: e.target.value,
@@ -59,7 +74,7 @@ class ListView extends Component {
   }
 
   render() {
-    const { items, total, fetching } = this.state;
+    const { items, total, fetching, page } = this.state;
     return (
       <Content>
         <div className="row header">
@@ -124,6 +139,7 @@ class ListView extends Component {
                     </Link>
                   ))}
                 </div>
+                <Pager currentPage={page} total={parseInt(total / 10, 10) + 1} change={this.pager} />
               </Card.Body>
             </Card>
           </div>
