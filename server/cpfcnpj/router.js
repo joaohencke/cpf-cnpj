@@ -1,5 +1,6 @@
 const express = require('express');
 const { validator } = require('../utils/struct');
+const { handler } = require('../utils/error');
 
 const manager = require('./');
 
@@ -14,11 +15,11 @@ router.get(
     order: 'string?',
     page: 'string?',
   }),
-  (req, res, next) => {
+  (req, res) => {
     manager
       .list(req.validData)
       .then(items => res.json(items))
-      .catch(next);
+      .catch(handler.bind(handler, res));
   },
 );
 
@@ -26,7 +27,7 @@ router.get('/:_id', validator('params', { _id: 'string & mongoId' }), (req, res,
   manager
     .get(req.validData)
     .then(entry => res.json(entry))
-    .catch(next);
+    .catch(handler.bind(handler, res));
 });
 
 router.post(
@@ -35,11 +36,11 @@ router.post(
     value: 'string & cpfcnpj',
     blacklist: 'boolean',
   }),
-  (req, res, next) => {
+  (req, res) => {
     manager
       .create(req.validData)
       .then(entry => res.json(entry))
-      .catch(next);
+      .catch(handler.bind(handler, res));
   },
 );
 
@@ -50,10 +51,10 @@ router.put(
     value: 'string & cpfcnpj',
     blacklist: 'boolean',
   }),
-  (req, res, next) => {
+  (req, res) => {
     manager
       .update(req.validData)
       .then(entry => res.json(entry))
-      .catch(next);
+      .catch(handler.bind(handler, res));
   },
 );

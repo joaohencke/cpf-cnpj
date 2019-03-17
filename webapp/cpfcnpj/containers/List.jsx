@@ -64,9 +64,10 @@ class ListView extends Component {
       <Content>
         <div className="row header">
           <div className="col-4">
-            <Breadcrumb items={[`Listagem - ${total} registros`]} />
+            <Breadcrumb items={[{ text: `Listagem - ${total} registros`, key: 12 }]} />
           </div>
           <div className="col-8">
+            {/* eslint-disable-next-line */}
             <Link route="novo">
               <button className="float-right btn btn-sm btn-primary btn-action" type="button">
                 novo
@@ -116,7 +117,7 @@ class ListView extends Component {
 
                         <small>
                           criado em&nbsp;
-                          {moment(x.createdAt).format('DD/MM/YYYY hh:mm')}
+                          {moment(x.createdAt).format('DD/MM/YYYY HH:mm')}
                         </small>
                         {x.blacklist && <small className="float-right">blacklist</small>}
                       </button>

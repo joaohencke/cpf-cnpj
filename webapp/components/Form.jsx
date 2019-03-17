@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import toastr from 'toastr';
+import 'toastr/build/toastr.css';
+
+toastr.options = {
+  positionClass: 'toast-top-full-width',
+  hideDuration: 300,
+  timeOut: 60000,
+};
 
 class Form extends Component {
   constructor(props, context) {
     super(props, context);
 
     this.state = {
-      validated: false,
       submitting: false,
     };
 
@@ -28,27 +35,15 @@ class Form extends Component {
     if (!formEl.checkValidity()) {
       for (let i = 0; i < formLength; i += 1) {
         const elem = formEl[i];
-
-        const errorLabel = elem.parentNode.querySelector('.invalid-feedback');
-
-        if (errorLabel && elem.nodeName.toLowerCase() !== 'button') {
+        if (elem.nodeName.toLowerCase() !== 'button') {
           if (!elem.validity.valid) {
-            errorLabel.textContent = elem.validationMessage;
-          } else {
-            errorLabel.textContent = '';
+            toastr.error('O formulário contém dados inválidos');
+            return false;
           }
         }
       }
 
       return false;
-    }
-
-    for (let i = 0; i < formLength; i += 1) {
-      const elem = formEl[i];
-      const errorLabel = elem.parentNode.querySelector('.invalid-feedback');
-      if (errorLabel && elem.nodeName.toLowerCase() !== 'button') {
-        errorLabel.textContent = '';
-      }
     }
 
     return true;
@@ -58,12 +53,11 @@ class Form extends Component {
     e.preventDefault();
 
     const { submitting } = this.state;
-    const { submit } = this.props;
+    const { submit, validateFn } = this.props;
     if (submitting) return;
 
-    this.setState({ validated: true });
     if (!this.validate()) return;
-
+    if (validateFn && !validateFn()) return;
     this.setState({ submitting: true });
     try {
       await submit(e);
@@ -75,17 +69,12 @@ class Form extends Component {
   }
 
   render() {
-    // const props = { ...this.props };
-    // let classNames = { this.props };
     let classes = [];
     const { children, classNames } = this.props;
-    const { validated } = this.state;
 
     if (classNames.length) {
       classes = classNames;
     }
-
-    if (validated) classes.push('was-validated');
 
     return (
       <form
@@ -106,11 +95,13 @@ Form.propTypes = {
   children: PropTypes.node,
   classNames: PropTypes.string,
   submit: PropTypes.func.isRequired,
+  validateFn: PropTypes.func,
 };
 
 Form.defaultProps = {
   children: undefined,
   classNames: '',
+  validateFn: undefined,
 };
 
 export default Form;
