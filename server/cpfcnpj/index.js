@@ -17,14 +17,12 @@ exports.update = ({ id, value, blacklist }) => {
   if (Object.keys($set).length) return Model.findByIdAndUpdate(id, { $set });
   return Model.findById(id);
 };
-function escapeRegex(text) {
-  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-}
+
 exports.list = async ({ order, filter, page = 0, limit = 30 }) => {
   const query = {};
 
   if (filter) {
-    const regexQuery = new RegExp(escapeRegex(filter), 'i');
+    const regexQuery = new RegExp(filter.replace(/[^0-9a-zA-Z]+/g, ''), 'i');
     query.value = regexQuery;
   }
 

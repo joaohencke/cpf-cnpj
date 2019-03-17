@@ -13,11 +13,7 @@ const handle = routes.getRequestHandler(app);
 
   const server = express();
   config(server);
-  // server.use(handle);
-  server.get('*', (req, res) => {
-    console.log('handle');
-    return handle(req, res);
-  });
+  server.get('*', handle);
 
   server.use((err, req, res) => {
     let error = Boom.isBoom(err) ? err : Boom.boomify(err);
