@@ -8,15 +8,17 @@ exports.create = async ({ value, blacklist }) => {
   return entry.toObject();
 };
 
-exports.update = ({ id, value, blacklist }) => {
+exports.update = ({ _id, value, blacklist }) => {
   const $set = {};
 
   if (value !== undefined) $set.value = value;
   if (blacklist !== undefined) $set.blacklist = blacklist;
 
-  if (Object.keys($set).length) return Model.findByIdAndUpdate(id, { $set });
-  return Model.findById(id);
+  if (Object.keys($set).length) return Model.findByIdAndUpdate(_id, { $set });
+  return Model.findById(_id);
 };
+
+exports.get = ({ _id }) => Model.findById(_id).lean();
 
 exports.list = async ({ order, filter, page = 0, limit = 30 }) => {
   const query = {};
@@ -33,5 +35,4 @@ exports.list = async ({ order, filter, page = 0, limit = 30 }) => {
 
   const [items, total] = await Promise.all([mongoSearch.exec(), Model.countDocuments(query)]);
   return { items, total };
-  // return mongoSearch.exec();
 };

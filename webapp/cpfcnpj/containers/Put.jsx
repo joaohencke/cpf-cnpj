@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import toastr from 'toastr';
+
+import { Router } from '../../../routes';
 import { Form, MaskedInput, Content, Breadcrumb, Card } from '../../components';
-import { put } from '../service';
+import { put, get } from '../service';
 import validations from '../../../common/validations';
 
 toastr.options = {
@@ -12,17 +15,33 @@ toastr.options = {
 class PutView extends Component {
   constructor(props) {
     super(props);
-
+    const { id } = props;
     this.state = {
-      _id: undefined,
+      _id: id,
       value: '',
-      blacklist: false,
+      blacklist: undefined,
       submitting: false,
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.put = this.put.bind(this);
     this.validateFn = this.validateFn.bind(this);
+  }
+
+  static getInitialProps({ query }) {
+    return query;
+  }
+
+  componentWillMount() {
+    const { id } = this.props;
+    if (id) this.get();
+  }
+
+  async get() {
+    const { id } = this.props;
+
+    const entry = await get(id);
+    this.setState({ ...entry });
   }
 
   handleChange(e) {
@@ -56,6 +75,7 @@ class PutView extends Component {
 
     const parsedValue = value.replace(/[^a-zA-Z0-9 ]/g, '');
 
+    this.setState({ submitting: true });
     const entry = {
       _id,
       blacklist: blacklist === 'true',
@@ -64,22 +84,15 @@ class PutView extends Component {
 
     try {
       await put(entry);
-      this.setState({
-        _id: undefined,
-        value: '',
-        blacklist: undefined,
-      });
+      Router.push('/');
     } catch (er) {
       toastr.error(er.message);
     }
   }
 
-  componentWillMount() {
-    console.log(this);
-  }
-
   render() {
-    const { value, submitting } = this.state;
+    const { value, submitting, blacklist } = this.state;
+    console.log(typeof blacklist);
     return (
       <Content>
         <div className="row header">
@@ -116,7 +129,8 @@ class PutView extends Component {
                           id="blacklist"
                           name="blacklist"
                           onChange={this.handleChange}
-                          value
+                          defaultChecked={blacklist}
+                          value="true"
                         />
                         <label htmlFor="blacklist" className="form-check-label">
                           Blacklist
@@ -146,5 +160,13 @@ class PutView extends Component {
     );
   }
 }
+
+PutView.propTypes = {
+  id: PropTypes.string,
+};
+
+PutView.defaultProps = {
+  id: undefined,
+};
 
 export default PutView;

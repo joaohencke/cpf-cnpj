@@ -40,6 +40,11 @@ export function put({ _id, ...args }) {
   return update({ ...args, _id });
 }
 
+export async function get(id) {
+  const res = await axios.get(endpoint(`/${id}`));
+  return res.data;
+}
+
 export async function fetch({ filter, order, page }) {
   const res = await axios.get(endpoint(`?filter=${filter}&order=${order}&page=${page}`));
   return res.data;
