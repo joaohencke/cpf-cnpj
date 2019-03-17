@@ -17,11 +17,16 @@ exports.update = ({ id, value, blacklist }) => {
   if (Object.keys($set).length) return Model.findByIdAndUpdate(id, { $set });
   return Model.findById(id);
 };
-
-exports.list = ({ order, value, page = 0, limit = 30 }) => {
+function escapeRegex(text) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+}
+exports.list = ({ order, filter, page = 0, limit = 30 }) => {
   const query = {};
 
-  if (value !== undefined) query.$text = { $search: value };
+  if (filter) {
+    const regexQuery = new RegExp(escapeRegex(filter), 'i');
+    query.value = regexQuery;
+  }
 
   let mongoSearch = Model.find(query);
 
