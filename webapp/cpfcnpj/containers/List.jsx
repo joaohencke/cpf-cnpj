@@ -79,7 +79,7 @@ class ListView extends Component {
       <Content>
         <div className="row header">
           <div className="col-4">
-            <Breadcrumb items={[{ text: `Listagem - ${total} registros`, key: 12 }]} />
+            <Breadcrumb items={[{ text: `Listagem - ${total} registros` }]} />
           </div>
           <div className="col-8">
             {/* eslint-disable-next-line */}

@@ -91,13 +91,15 @@ class PutView extends Component {
   }
 
   render() {
-    const { value, submitting, blacklist } = this.state;
-    console.log(typeof blacklist);
+    const { value, submitting, blacklist, _id } = this.state;
+
+    const pageTitle = _id === undefined ? ' /Novo' : ' /Editar';
+
     return (
       <Content>
         <div className="row header">
           <div className="col-auto">
-            <Breadcrumb items={[{ text: 'Listagem', route: 'index' }, { text: '/Novo' }]} />
+            <Breadcrumb items={[{ text: 'Listagem', route: 'index' }, { text: pageTitle }]} />
           </div>
         </div>
         <div className="row content">
