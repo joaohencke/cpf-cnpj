@@ -21,6 +21,11 @@ export function put({ _id, ...args }) {
 
 export async function fetch({ filter, order, page }) {
   const res = await axios.get(endpoint(`?filter=${filter}&order=${order}&page=${page}`));
-
   return res.data;
+}
+
+export function mask(value) {
+  if (value.length > 11) return value.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
+
+  return value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/g, '$1.$2.$3-$4');
 }

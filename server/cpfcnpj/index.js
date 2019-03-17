@@ -20,7 +20,7 @@ exports.update = ({ id, value, blacklist }) => {
 function escapeRegex(text) {
   return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 }
-exports.list = ({ order, filter, page = 0, limit = 30 }) => {
+exports.list = async ({ order, filter, page = 0, limit = 30 }) => {
   const query = {};
 
   if (filter) {
@@ -33,5 +33,7 @@ exports.list = ({ order, filter, page = 0, limit = 30 }) => {
   if (order) mongoSearch = mongoSearch.sort(order);
   if (page) mongoSearch = mongoSearch.skip(page * limit).limit(limit);
 
-  return mongoSearch.exec();
+  const [items, total] = await Promise.all([mongoSearch.exec(), Model.countDocuments(query)]);
+  return { items, total };
+  // return mongoSearch.exec();
 };

@@ -2,17 +2,18 @@ const express = require('express');
 const next = require('next');
 const Boom = require('boom');
 const config = require('./server/__config');
+const routes = require('./routes');
 
 const port = process.env.NODE_ENV || 3000;
 const app = next({ dev: process.env.NODE_ENV !== 'production' });
-const handle = app.getRequestHandler();
+const handle = routes.getRequestHandler(app);
 
 (async () => {
   await app.prepare();
 
   const server = express();
   config(server);
-
+  // server.use(handle);
   server.get('*', (req, res) => {
     console.log('handle');
     return handle(req, res);
