@@ -16,7 +16,7 @@ export function put({ _id, ...args }) {
   const isCreation = _id === undefined;
 
   if (isCreation) return create(args);
-  return update({ _id, ...args });
+  return update({ ...args, _id });
 }
 
 export async function fetch({ filter, order, page }) {

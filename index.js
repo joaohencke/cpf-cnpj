@@ -4,7 +4,7 @@ const Boom = require('boom');
 const config = require('./server/__config');
 const routes = require('./routes');
 
-const port = process.env.NODE_ENV || 3000;
+const port = process.env.PORT || 3000;
 const app = next({ dev: process.env.NODE_ENV !== 'production' });
 const handle = routes.getRequestHandler(app);
 
