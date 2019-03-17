@@ -7,15 +7,13 @@ module.exports = app => {
     express.json({
       limit: '50mb',
       type: 'application/json',
-    })
+    }),
   );
-  app.use(
-    morgan('dev')
-  );
+  app.use(morgan('dev'));
 
   db();
 
-  const apis = require('../_apis');
+  const apis = require('../_apis'); //eslint-disable-line
 
   Object.keys(apis).forEach(path => {
     app.use(`/api/${path}`, apis[path]);

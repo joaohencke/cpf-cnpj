@@ -1,4 +1,3 @@
-const Boom = require('boom');
 const Model = require('./model');
 
 exports.create = async ({ value, blacklist }) => {
@@ -19,7 +18,15 @@ exports.update = ({ id, value, blacklist }) => {
   return Model.findById(id);
 };
 
-exports.list = ({ order, value }) => {
+exports.list = ({ order, value, page = 0, limit = 30 }) => {
+  const query = {};
 
+  if (value !== undefined) query.$text = { $search: value };
+
+  let mongoSearch = Model.find(query);
+
+  if (order) mongoSearch = mongoSearch.sort(order);
+  if (page) mongoSearch = mongoSearch.skip(page * limit).limit(limit);
+
+  return mongoSearch.exec();
 };
-

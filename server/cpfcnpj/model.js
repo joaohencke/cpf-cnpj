@@ -13,6 +13,8 @@ Schema.path('value').validate(async function validation(value) {
   return !count;
 }, 'already_registered');
 
+Schema.index({ value: 'text' });
+
 const Model = mongoose.model('cpfcnpj', Schema);
 
 module.exports = Model;

@@ -13,9 +13,14 @@ async function update({ _id, value, blacklist }) {
 }
 
 export function put({ _id, ...args }) {
-
   const isCreation = _id === undefined;
 
   if (isCreation) return create(args);
   return update({ _id, ...args });
+}
+
+export async function fetch({ filter, order, page }) {
+  const res = await axios.get(endpoint(`?filter=${filter}&order=${order}&page=${page}`));
+
+  return res.data;
 }
