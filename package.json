@@ -3,7 +3,7 @@
   "scripts": {
     "dev": "node .",
     "build": "next build",
-    "start": "next start"
+    "start": "NODE_ENV=production node ."
   },
   "dependencies": {
     "@zeit/next-css": "^1.0.1",
