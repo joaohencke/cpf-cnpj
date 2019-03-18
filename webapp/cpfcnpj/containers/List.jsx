@@ -1,26 +1,17 @@
+/* eslint-disable react/prop-types */
 import React, { Component } from 'react';
 import moment from 'moment';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import { Link } from '../../../routes';
 import { Content, Breadcrumb, Form, Card, Pager } from '../../components';
-import { fetch, mask } from '../service';
+import { mask } from '../service';
+import * as actions from '../actions';
 
 class ListView extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      fetching: false,
-      items: [],
-      filter: '',
-      page: 0,
-      total: 0,
-      order: {
-        by: 'createdAt',
-        reverse: true,
-      },
-      timeout: undefined,
-    };
 
     this.fetch = this.fetch.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -32,36 +23,28 @@ class ListView extends Component {
   }
 
   async fetch() {
-    const { fetching, filter, page, order } = this.state;
+    const { setFetching, fetch, filter, page, order } = this.props;
 
-    if (fetching) return;
+    setFetching(true);
 
-    this.setState({ fetching: true });
-
-    const { items, total } = await fetch({
+    await fetch({
       filter,
       page,
       order: `${order.reverse ? '-' : ``}${order.by}`,
     });
-    this.setState({ items, total, fetching: false });
   }
 
   pager(increment) {
-    console.log(increment);
-    // const { page } = this.state;
-    // console.log(page, current);
-    // this.setState({ page: page + current });
-    // setTimeout(this.fetch, 10);
-    this.setState(
-      state => {
-        return { page: state.page + increment };
-      },
-      () => this.fetch(),
-    );
+    const { setFilter, page } = this.props;
+    setFilter({
+      page: page + increment,
+    });
+    setTimeout(this.fetch, 10);
   }
 
   handleChange(e) {
-    this.setState({
+    const { setFilter } = this.props;
+    setFilter({
       [e.target.name]: e.target.value,
     });
     if (e.target.name !== 'filter') return;
@@ -74,7 +57,7 @@ class ListView extends Component {
   }
 
   render() {
-    const { items, total, fetching, page } = this.state;
+    const { items, total, fetching, page } = this.props;
     return (
       <Content>
         <div className="row header">
@@ -160,4 +143,11 @@ class ListView extends Component {
   }
 }
 
-export default ListView;
+const mapStateToProps = state => ({ ...state.cpfcnpj.list });
+
+const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ListView);
