@@ -1,9 +1,3 @@
-import React, { Component } from 'react';
-
-class Support extends Component {
-  render() {
-    return <div className="container" />;
-  }
-}
+import Support from '../webapp/support/containers/Support';
 
 export default Support;
