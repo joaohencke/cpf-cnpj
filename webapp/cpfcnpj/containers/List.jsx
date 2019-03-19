@@ -13,6 +13,7 @@ class ListView extends Component {
   constructor(props) {
     super(props);
 
+    this.state = { timeout: undefined };
     this.fetch = this.fetch.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.pager = this.pager.bind(this);
