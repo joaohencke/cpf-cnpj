@@ -58,7 +58,7 @@ class ListView extends Component {
   }
 
   render() {
-    const { items, total, fetching, page } = this.props;
+    const { items = [], total = 0, fetching, page } = this.props;
     return (
       <Content>
         <div className="row header">
@@ -106,7 +106,7 @@ class ListView extends Component {
                     <Link
                       key={x._id}
                       route='editar'
-                      params={{ id: x._id }}
+                      params={{ _id: x._id }}
                     >
                       <button
                         type="button"

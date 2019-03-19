@@ -16,7 +16,7 @@ const initialState = {
   put: {
     _id: undefined,
     value: '',
-    blacklist: undefined,
+    blacklist: false,
     submitting: false,
   },
 };
@@ -34,12 +34,7 @@ export default function cpfcnpjReducer(state = initialState, action) {
         },
       };
     }
-    case actions.PUT: {
-      return {
-        ...state,
-        put: initialState.put,
-      };
-    }
+
     case actions.FETCHING: {
       return {
         ...state,
@@ -63,6 +58,31 @@ export default function cpfcnpjReducer(state = initialState, action) {
         ...state,
         list: {
           ...state.list,
+          ...action.value,
+        },
+      };
+    }
+    case actions.PUT: {
+      return {
+        ...state,
+        put: { ...initialState.put },
+      };
+    }
+    case actions.SUBMITTING: {
+      return {
+        ...state,
+        put: {
+          ...state.put,
+          submitting: action.value,
+        },
+      };
+    }
+    case actions.MODEL_CHANGE:
+    case actions.GET: {
+      return {
+        ...state,
+        put: {
+          ...state.put,
           ...action.value,
         },
       };

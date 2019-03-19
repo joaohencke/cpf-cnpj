@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import toastr from 'toastr';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import { Router } from '../../../routes';
 import { Form, MaskedInput, Content, Breadcrumb, Card } from '../../components';
-import { put, get } from '../service';
+import * as actions from '../actions';
 import validations from '../../../common/validations';
 
 toastr.options = {
@@ -15,13 +16,6 @@ toastr.options = {
 class PutView extends Component {
   constructor(props) {
     super(props);
-    const { id } = props;
-    this.state = {
-      _id: id,
-      value: '',
-      blacklist: undefined,
-      submitting: false,
-    };
 
     this.handleChange = this.handleChange.bind(this);
     this.put = this.put.bind(this);
@@ -29,30 +23,40 @@ class PutView extends Component {
   }
 
   static getInitialProps({ query }) {
-    return query;
+    return { query };
   }
 
   componentWillMount() {
-    const { id } = this.props;
-    if (id) this.get();
+    const { query } = this.props;
+    if (!query) return;
+    const { _id } = query;
+    if (_id) this.get(_id);
   }
 
-  async get() {
-    const { id } = this.props;
+  componentWillUnmount() {
+    const { modelChange } = this.props;
+    modelChange({
+      _id: undefined,
+      value: undefined,
+      blacklist: false,
+    });
+  }
 
-    const entry = await get(id);
-    this.setState({ ...entry });
+  async get(id) {
+    const { getFromServer } = this.props;
+    getFromServer(id);
   }
 
   handleChange(e) {
-    console.log(e.target.name, e.target.value);
-    this.setState({
-      [e.target.name]: e.target.value,
+    const { modelChange } = this.props;
+
+    modelChange({
+      [e.target.name]: e.target.type === 'checkbox' ? e.target.checked : e.target.value,
     });
   }
 
   validateFn() {
-    const { value } = this.state;
+    const { value } = this.props;
     const parsedValue = value.replace(/[^a-zA-Z0-9 ]/g, '');
 
     if (
@@ -69,16 +73,16 @@ class PutView extends Component {
 
   async put(e) {
     e.preventDefault();
-
-    const { submitting, value, _id, blacklist } = this.state;
+    const { submitting, value, _id, blacklist, put, setSubmitting } = this.props;
     if (submitting) return;
+
+    setSubmitting(true);
 
     const parsedValue = value.replace(/[^a-zA-Z0-9 ]/g, '');
 
-    this.setState({ submitting: true });
     const entry = {
       _id,
-      blacklist: blacklist === 'true',
+      blacklist,
       value: parsedValue,
     };
 
@@ -87,12 +91,13 @@ class PutView extends Component {
       Router.push('/');
     } catch (er) {
       toastr.error(er.message);
+    } finally {
+      setTimeout(setSubmitting.bind(null, false), 10);
     }
   }
 
   render() {
-    const { value, submitting, blacklist, _id } = this.state;
-
+    const { value, submitting, blacklist, _id } = this.props;
     const pageTitle = _id === undefined ? ' /Novo' : ' /Editar';
 
     return (
@@ -131,8 +136,8 @@ class PutView extends Component {
                           id="blacklist"
                           name="blacklist"
                           onChange={this.handleChange}
-                          defaultChecked={blacklist}
-                          value="true"
+                          checked={blacklist}
+                          value
                         />
                         <label htmlFor="blacklist" className="form-check-label">
                           Blacklist
@@ -163,12 +168,10 @@ class PutView extends Component {
   }
 }
 
-PutView.propTypes = {
-  id: PropTypes.string,
-};
+const mapStateToProps = state => ({ ...state.cpfcnpj.put });
+const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch);
 
-PutView.defaultProps = {
-  id: undefined,
-};
-
-export default PutView;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(PutView);
