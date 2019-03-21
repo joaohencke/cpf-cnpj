@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../actions';
+import { Card, Content } from '../../components';
 
 const format = sec => {
   function pad(s) {
@@ -13,6 +14,7 @@ const format = sec => {
 
   return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 };
+
 class SupportView extends Component {
   async componentWillMount() {
     const { fetch, setFetching } = this.props;
@@ -26,13 +28,33 @@ class SupportView extends Component {
     const { fetching, data } = this.props;
 
     return (
-      <div className="container">
-        <div>
-          Vamos ver uptime:
-          <div className="uptime">{format(data.uptime)}</div>
-          <div className="search-counter">{data.searchCounter}</div>
-        </div>
-      </div>
+      <Content>
+        <Card>
+          {fetching && (
+            <Card.Body>
+              <span className="alert alert-info">carregando...</span>
+            </Card.Body>
+          )}
+          {!fetching && (
+            <Card.Body>
+              <ul className="list-group">
+                <li className="list-group-item">
+                  <span className="text-primary">Uptime</span>
+
+                  <br />
+                  <small>{format(data.uptime)}</small>
+                </li>
+                <li className="list-group-item">
+                  <span className="text-primary">Nr. de consultas</span>
+
+                  <br />
+                  <small>{data.searchCounter}</small>
+                </li>
+              </ul>
+            </Card.Body>
+          )}
+        </Card>
+      </Content>
     );
   }
 }
