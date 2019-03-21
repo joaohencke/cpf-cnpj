@@ -6,7 +6,7 @@
 ## How to run:
 After clone, you can run
 ```bash 
-./install.sh
+bash install.sh
 ```
 
 then... you can visit http://localhost:3000
@@ -24,3 +24,19 @@ docker run -it -p 3000:3000 --link mongodb:mongo next-app
 
 
 Simpler than Bettina's methods :speak_no_evil:
+
+If something goes wrong... don't give up... but you will need another dependencies :kissing_closed_eyes:
+
+- [mongodb](https://www.mongodb.com/) - running on port 27017;
+- [nodejs](https://nodejs.org/en/) 
+
+... and at least... but not less important... 
+you must install internal dependencies running
+
+`npm install`
+
+then run
+
+`npm run dev`
+
+then... visit http://localhost:3000
