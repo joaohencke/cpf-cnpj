@@ -23,4 +23,4 @@ docker run -it -p 3000:3000 --link mongodb:mongo next-app
 ...then, visit http://localhost:3000
 
 
-Simpler than Bettina method's :speak_no_evil:
+Simpler than Bettina's methods :speak_no_evil:
