@@ -6,7 +6,7 @@
 ## How to run:
 After clone, you can run
 ```bash 
-./install.sh
+bash install.sh
 ```
 
 then... you can visit http://localhost:3000
