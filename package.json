@@ -12,11 +12,13 @@
     "bootstrap": "^4.3.1",
     "classnames": "^2.2.6",
     "express": "^4.16.4",
+    "jquery": "^3.3.1",
     "moment": "^2.24.0",
     "mongoose": "^5.4.19",
     "morgan": "^1.9.1",
     "next": "8.0.3",
     "next-routes": "^1.4.2",
+    "popper.js": "^1.14.7",
     "prop-types": "^15.7.2",
     "react": "16.8.4",
     "react-dom": "16.8.4",
@@ -38,5 +40,14 @@
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.12.4",
     "prettier": "^1.16.4"
+  },
+  "bin": "index.js",
+  "pkg": {
+    "assets": [
+      ".next/**/*"
+    ],
+    "scripts": [
+      ".next/dist/**/*.js"
+    ]
   }
 }

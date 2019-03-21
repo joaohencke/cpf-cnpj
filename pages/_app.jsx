@@ -2,8 +2,15 @@ import React from 'react';
 import App, { Container } from 'next/app';
 import { Provider } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
+import $ from 'jquery';
+import Popper from 'popper.js';
 import withStore from '../webapp/withRedux';
 
+if (process.browser) {
+  window.$ = $;
+  window.jQuery = $;
+  window.Popper = Popper;
+}
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
     let pageProps = {};
