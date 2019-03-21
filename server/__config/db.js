@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 
+const isDev = process.env.NODE_ENV !== 'production';
 module.exports = () => {
-  const connectionString = 'mongodb://localhost:27017/validador';
+  const connectionString = isDev ? 'mongodb://localhost:27017/validador' : 'mongodb://mongo:27017/validador';
   mongoose.connect(connectionString, {
     config: { autoIndex: true },
     useNewUrlParser: true,
