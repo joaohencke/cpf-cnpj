@@ -11,7 +11,7 @@ import validations from '../../../common/validations';
 toastr.options = {
   positionClass: 'toast-top-full-width',
   hideDuration: 300,
-  timeOut: 60000,
+  timeOut: 2000,
 };
 class PutView extends Component {
   constructor(props) {
@@ -74,7 +74,7 @@ class PutView extends Component {
   async put(e) {
     e.preventDefault();
     const { submitting, value, _id, blacklist, put, setSubmitting } = this.props;
-    if (submitting) return;
+    if (submitting) return false;
 
     setSubmitting(true);
 
@@ -85,15 +85,12 @@ class PutView extends Component {
       blacklist,
       value: parsedValue,
     };
-
-    try {
-      await put(entry);
-      Router.push('/');
-    } catch (er) {
-      toastr.error(er.message);
-    } finally {
-      setTimeout(setSubmitting.bind(null, false), 10);
+    const res = await put(entry);
+    setTimeout(setSubmitting.bind(null, false));
+    if (res.err) {
+      return toastr.error(res.err.message);
     }
+    return Router.push('/');
   }
 
   render() {
