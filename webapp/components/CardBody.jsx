@@ -1,9 +1,8 @@
 import React from 'react';
 
-const CardBody = (props) => {
-  return (
-    <div className="card-body" {...props}></div>
-  )
+const CardBody = ({ className = '', ...props }) => {
+  const classes = `card-body ${className}`;
+  return <div className={classes} {...props} />;
 };
 
 export default CardBody;

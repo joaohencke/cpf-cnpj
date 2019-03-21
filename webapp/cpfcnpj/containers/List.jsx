@@ -98,6 +98,11 @@ class ListView extends Component {
                   </div>
                 </Form>
               </Card.Header>
+              {!items.length && (
+                <Card.Body className="text-center">
+                  <span className="alert alert-info">Não existem itens a serem exibidos</span>
+                </Card.Body>
+              )}
               <Card.Body>
                 <div className="list-group">
                   {items.map(x => (
